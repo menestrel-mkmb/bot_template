@@ -1,21 +1,58 @@
-# THIS DOCKERFILE IS INTENDED FOR DEVELOPMENT ENVIRONMENTS
-# DO NOT USE THIS FOR PRODUCTION USAGES.
-
-version: '3'
-
 services:
-  postgresql:
-    image: docker.io/bitnami/postgresql:16
+  api:
+    container_name: bot_checkin
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - POSTGRESQL_DATABASE=${POSTGRES_DB}
+        - POSTGRESQL_USERNAME=${POSTGRES_USER}
+        - POSTGRESQL_PASS=${POSTGRES_PASS}
+        - POSTGRESQL_PASSWORD=${POSTGRES_PASS}
+        - POSTGRESQL_URL=${POSTGRES_URL}
+        - POSTGRESQL_PORT=${POSTGRES_PORT}
     ports:
-      - '5432:5432'
+      - 3000:3000
+    depends_on:
+      postgresql:
+        condition: service_healthy
+        restart: true
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASS}@${POSTGRES_URL}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public
+    networks:
+      - bot-network
+  
+  postgresql:
+    container_name: bot_db
+    image: docker.io/bitnami/postgresql:16
+    restart: unless-stopped
+    ports:
+      - ${POSTGRES_PORT}:5432
     volumes:
       - 'postgresql_data:/bitnami/postgresql'
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
-      - POSTGRESQL_DATABASE=nestjs
-      - POSTGRESQL_USERNAME=nestjs
-      - POSTGRESQL_PASSWORD=password
+      - POSTGRESQL_DATABASE=${POSTGRES_DB}
+      - POSTGRESQL_USERNAME=${POSTGRES_USER}
+      - POSTGRESQL_PASS=${POSTGRES_PASS}
+      - POSTGRESQL_PASSWORD=${POSTGRES_PASS}
+      - POSTGRESQL_URL=${POSTGRES_URL}
+      - POSTGRESQL_PORT=${POSTGRES_PORT}
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    networks:
+      - bot-network
 
 volumes:
   postgresql_data:
     driver: local
+
+networks:
+  bot-network:
+    driver: bridge
