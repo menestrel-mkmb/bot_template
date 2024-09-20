@@ -17,7 +17,7 @@ export class AppUpdate {
         this.logger.log(`Bot logged in as ${c.user.username}`);
       })
       .catch((err) => {
-        this.logger.error(err);
+        this.logger.error(`Log com undefined request: ${err}`);
       });
   }
 

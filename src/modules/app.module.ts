@@ -9,6 +9,7 @@ import {
 } from 'discord.js';
 import { NecordModule } from 'necord';
 
+import { DiscordExceptionFilter } from './app.exception';
 import { AppService } from './app.service';
 import { AppUpdate } from './app.update';
 
@@ -42,7 +43,7 @@ import { PassengerModule } from './passenger/passenger.module';
             ],
           }),
     ],
-    providers: [AppService, AppUpdate],
+    providers: [AppService, AppUpdate, DiscordExceptionFilter],
     exports: [AppService],
 })
 export class ApplicationModule {}
