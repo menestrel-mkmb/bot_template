@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Module, UseFilters } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import {
-  // BitFieldResolvable,
-  // GatewayIntentsString,
-  // IntentsBitField,
+  BitFieldResolvable,
+  GatewayIntentsString,
+  IntentsBitField,
   Partials,
 } from 'discord.js';
 import { NecordModule } from 'necord';
@@ -16,7 +16,10 @@ import { AppUpdate } from './app.update';
 import { CommonModule } from './common';
 import { PassengerModule } from './passenger/passenger.module';
 
+const intentsObj = ['Guilds', 'GuildMessages', 'DirectMessages'] as BitFieldResolvable<GatewayIntentsString,number>;
+const intentsObjForDev = Object.keys(IntentsBitField.Flags) as BitFieldResolvable<GatewayIntentsString,number>;
 
+@UseFilters(DiscordExceptionFilter)
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -27,11 +30,7 @@ import { PassengerModule } from './passenger/passenger.module';
         PassengerModule,
         NecordModule.forRoot({
             token: process.env.DISCORD_BOT_TOKEN || '',
-            intents: ['Guilds', 'GuildMessages', 'DirectMessages'],
-            // intents: Object.keys(IntentsBitField.Flags) as BitFieldResolvable<
-            //   GatewayIntentsString,
-            //   number
-            // >,
+            intents: process.env.DISCORD_ALL_INTENTS_ENABLE ? intentsObjForDev : intentsObj,
             partials: [
               Partials.Channel,
               Partials.GuildMember,
@@ -43,7 +42,7 @@ import { PassengerModule } from './passenger/passenger.module';
             ],
           }),
     ],
-    providers: [AppService, AppUpdate, DiscordExceptionFilter],
+    providers: [AppService, AppUpdate],
     exports: [AppService],
 })
 export class ApplicationModule {}
