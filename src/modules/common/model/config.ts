@@ -14,4 +14,6 @@ export interface Config {
 
     readonly PASSENGERS_ALLOWED: string;
 
+    readonly DISCORD_BOT_TOKEN: string;
+
 }
