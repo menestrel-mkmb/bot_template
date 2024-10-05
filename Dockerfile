@@ -19,8 +19,8 @@ USER node
 WORKDIR /home/node
 
 COPY --chown=node:node ./package*.json  /home/node/
-COPY --from=dependencies --chown=node:node /home/node/node_modules /home/node/node_modules
-COPY --chown=node:node ./prisma /home/node/prisma
+COPY --from=dependencies --chown=node:node /home/node/node_modules/ /home/node/node_modules/
+COPY --chown=node:node ./prisma/ /home/node/prisma/
 
 RUN npx prisma generate
 
@@ -33,10 +33,12 @@ WORKDIR /home/node
 
 COPY --chown=node:node ./package*.json  /home/node/
 COPY --chown=node:node ./tsconfig.json  /home/node/
-COPY --chown=node:node ./tsconfig.build.json  /home/node/
-COPY --chown=node:node ./.env /home/node/.env
-COPY --chown=node:node ./src /home/node/src
-COPY --from=orm --chown=node:node /home/node/prisma /home/node/prisma
+COPY --chown=node:node ./tsconfig.eslint.json  /home/node/
+COPY --chown=node:node ./.env.local /home/node/.env
+COPY --chown=node:node ./src/ /home/node/src/
+COPY --from=orm --chown=node:node /home/node/prisma/ /home/node/prisma/
+
+RUN npx prisma generate
 
 RUN npm run build && npm prune --omit=dev
 
@@ -48,11 +50,11 @@ USER node
 WORKDIR /home/node
 
 COPY --chown=node:node ./package*.json  /home/node/
-COPY --from=dependencies --chown=node:node /home/node/node_modules /home/node/node_modules
-COPY --from=orm --chown=node:node /home/node/prisma /home/node/prisma
+COPY --from=dependencies --chown=node:node /home/node/node_modules/ /home/node/node_modules/
+COPY --from=orm --chown=node:node /home/node/prisma/ /home/node/prisma/
 RUN sleep 5
-COPY --from=builder --chown=node:node /home/node/dist /home/node/dist
+COPY --from=builder --chown=node:node /home/node/dist/ /home/node/dist/
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start"]
