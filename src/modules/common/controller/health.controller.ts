@@ -18,6 +18,7 @@ export class HealthController {
     public async healthCheck() {
 
         return this.health.check([
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             async () => this.database.pingCheck('database', this.prisma),
             () => ({
                 http: {
