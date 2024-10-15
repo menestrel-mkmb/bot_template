@@ -20,9 +20,12 @@ export const configProvider = {
             DISCORD_BOT_TOKEN: Joi.string().required()
         });
 
-        const result = validationSchema.validate(env);
+        const result = validationSchema.validate(env, {
+            abortEarly: false
+        });
         if (result.error) {
-            throw new Error(`Configuration not valid: ${result.error.message}`);
+            const errorMsgs = result.error.details.map(detail => detail.message);
+            throw new Error(`Configuration not valid: ${errorMsgs.join(', ')}`);
         }
 
         return result.value;
