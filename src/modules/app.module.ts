@@ -1,4 +1,4 @@
-import { Module, UseFilters } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import {
@@ -9,15 +9,19 @@ import {
 } from 'discord.js';
 import { NecordModule } from 'necord';
 
-import { DiscordExceptionFilter } from './app.exception';
-import { AppService } from './app.service';
-import { AppUpdate } from './app.update';
-
 import { CommonModule } from './common';
+import { DiscordModule } from './discord/discord.module';
+import { DiscordService } from './discord/discord.service';
 import { PassengerModule } from './passenger/passenger.module';
 
-const intentsObj = [IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMembers, IntentsBitField.Flags.DirectMessages] as BitFieldResolvable<GatewayIntentsString,number>;
-const intentsObjForDev = Object.keys(IntentsBitField.Flags) as BitFieldResolvable<GatewayIntentsString,number>;
+const intentsObj = [
+  IntentsBitField.Flags.Guilds,
+  IntentsBitField.Flags.GuildMembers,
+  IntentsBitField.Flags.DirectMessages
+] as BitFieldResolvable<GatewayIntentsString,number>;
+const intentsObjForDev = Object.keys(
+  IntentsBitField.Flags
+) as BitFieldResolvable<GatewayIntentsString,number>;
 const partialsObj = [
   Partials.Channel,
   Partials.GuildMember,
@@ -28,7 +32,6 @@ const partialsObj = [
   Partials.ThreadMember,
 ];
 
-@UseFilters(DiscordExceptionFilter)
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -36,14 +39,15 @@ const partialsObj = [
           isGlobal: true
         }),
         CommonModule,
+        DiscordModule,
         PassengerModule,
         NecordModule.forRoot({
-            token: process.env.DISCORD_BOT_TOKEN || '',
+            token:  process.env.DISCORD_BOT_TOKEN || '',
             intents: process.env.NODE_ENV === 'development' ? intentsObjForDev : intentsObj,
             partials: partialsObj,
           }),
     ],
-    providers: [AppService, AppUpdate],
-    exports: [AppService],
+    providers: [DiscordService],
+    exports: [DiscordService],
 })
 export class ApplicationModule {}
