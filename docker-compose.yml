@@ -2,6 +2,7 @@ services:
   api:
     container_name: bot_checkin
     restart: unless-stopped
+    env_file: .env
     build:
       context: ./
       dockerfile: Dockerfile
