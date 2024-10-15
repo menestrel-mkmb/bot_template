@@ -1,8 +1,8 @@
 {
-  "name": "nest-template",
+  "name": "checkin-bot",
   "version": "0.1.0",
-  "description": "NestJS API project template crafted for Docker environments",
-  "author": "Saluki",
+  "description": "Necord boilerplate",
+  "author": "CPDD",
   "license": "MIT",
   "private": true,
   "engines": {
@@ -10,7 +10,7 @@
   },
   "scripts": {
     "clean": "rimraf ./dist",
-    "start": "node dist/server.js",
+    "start": "npx prisma generate && npx prisma migrate deploy && npx prisma db push && node dist/main.js",
     "dev": "env-cmd -f .env nest start --watch",
     "build": "npm run clean && tsc",
     "test": "env-cmd -f .env jest --config=jest.json",
@@ -44,6 +44,8 @@
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.8.0",
     "@typescript-eslint/parser": "^8.8.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "env-cmd": "^10.1.0",
     "eslint": "^8.56.0",
     "eslint-plugin-import": "^2.30.0",
