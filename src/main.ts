@@ -3,9 +3,9 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import { DiscordExceptionFilter } from './modules/app.exception';
 import { ApplicationModule } from './modules/app.module';
 import { CommonModule, LogInterceptor } from './modules/common';
+import { DiscordExceptionFilter } from './modules/discord/discord.exception';
 
 /**
  * These are API defaults that can be changed using environment variables,
