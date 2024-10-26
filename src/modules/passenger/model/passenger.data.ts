@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Passenger } from '@prisma/client';
-
 export class PassengerData {
 
     public static readonly NAME_LENGTH = 50;
