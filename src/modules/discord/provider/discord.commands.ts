@@ -2,7 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { Context, SlashCommand, SlashCommandContext } from 'necord';
 
 @Injectable()
-export class DiscordService {
+export class DiscordCommands {
+
     @SlashCommand({
         name: 'hello',
         description: 'Hello from a nest application',

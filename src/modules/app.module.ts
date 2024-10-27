@@ -11,7 +11,7 @@ import { NecordModule } from 'necord';
 
 import { CommonModule } from './common';
 import { DiscordModule } from './discord/discord.module';
-import { DiscordService } from './discord/provider/discord.service';
+import { DiscordCommands } from './discord/provider/discord.commands';
 import { PassengerModule } from './passenger/passenger.module';
 
 const intentsObj = [
@@ -47,7 +47,7 @@ const partialsObj = [
             partials: partialsObj,
           }),
     ],
-    providers: [DiscordService],
-    exports: [DiscordService],
+    providers: [DiscordCommands],
+    exports: [DiscordCommands],
 })
 export class ApplicationModule {}
