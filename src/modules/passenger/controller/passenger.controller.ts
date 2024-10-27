@@ -4,7 +4,6 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 import { Config, LoggerService, RestrictedGuard } from '../../common';
 import { Service } from '../../tokens';
 
-import { PassengerPipe } from '../flow';
 import { PassengerData, PassengerInput } from '../model';
 import { PassengerService } from '../service';
 
@@ -32,7 +31,7 @@ export class PassengerController {
     @UseGuards(RestrictedGuard)
     @ApiOperation({ summary: 'Create passenger' })
     @ApiResponse({ status: HttpStatus.CREATED, type: PassengerData })
-    public async create(@Body(PassengerPipe) input: PassengerInput): Promise<PassengerData> {
+    public async create(@Body() input: PassengerInput): Promise<PassengerData> {
 
         if (this.config.PASSENGERS_ALLOWED === 'no') {
             throw new PreconditionFailedException('Not allowed to onboard passengers');

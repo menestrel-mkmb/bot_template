@@ -37,7 +37,7 @@ export class LoggerService {
     }
 
     private isTestEnv(): boolean {
-        return process.env.NODE_ENV === 'test';
+        return process.env.NODE_ENV === 'development';
     }
 
     private isProductionEnv(): boolean {

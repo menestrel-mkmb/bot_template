@@ -1,5 +1,3 @@
-import * as Joi from 'joi';
-
 import { Service } from '../../tokens';
 import { Config } from '../model';
 
@@ -9,26 +7,30 @@ export const configProvider = {
     useFactory: (): Config => {
 
         const env = process.env;
-        const validationSchema = Joi.object<Config>().unknown().keys({
-            API_PORT: Joi.number().required(),
-            API_PREFIX: Joi.string().required(),
-            SWAGGER_ENABLE: Joi.number().required(),
-            JWT_SECRET: Joi.string().required(),
-            JWT_ISSUER: Joi.string().required(),
-            HEALTH_TOKEN: Joi.string().required(),
-            PASSENGERS_ALLOWED: Joi.string().valid('yes', 'no').required(),
-            DISCORD_BOT_TOKEN: Joi.string().required()
-        });
 
-        const result = validationSchema.validate(env, {
-            abortEarly: false
-        });
-        if (result.error) {
-            const errorMsgs = result.error.details.map(detail => detail.message);
-            throw new Error(`Configuration not valid: ${errorMsgs.join(', ')}`);
-        }
+        return {
+            NODE_ENV: env.NODE_ENV || "development",
 
-        return result.value;
+            API_PORT: Number(env.API_PORT) || 3000,
+            API_PREFIX: env.API_PREFIX || 'api',
+
+            SWAGGER_ENABLE: Number(env.SWAGGER_ENABLE) || 1,
+
+            POSTGRES_DB: env.POSTGRES_DB || 'necord',
+            POSTGRES_URL: env.POSTGRES_URL || 'localhost',
+            POSTGRES_PORT: Number(env.POSTGRES_PORT) || 5432,
+            POSTGRES_USER: env.POSTGRES_USER || 'necord',
+            POSTGRES_PASSWORD: env.POSTGRES_PASSWORD || 'password',
+
+            DISCORD_BOT_TOKEN: env.DISCORD_BOT_TOKEN || 'SecretToBeFilled.andboy.itsugly',
+
+            JWT_SECRET: env.JWT_SECRET || 'secret',
+            JWT_ISSUER: env.JWT_ISSUER || 'necord',
+
+            HEALTH_TOKEN: env.HEALTH_TOKEN || 'secret',
+
+            PASSENGERS_ALLOWED: env.PASSENGERS_ALLOWED || 'yes',
+        };
     }
 
 };
