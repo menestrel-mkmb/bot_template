@@ -5,7 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { ApplicationModule } from './modules/app.module';
 import { CommonModule, LogInterceptor } from './modules/common';
-import { DiscordExceptionFilter } from './modules/discord/discord.exception';
+import { DiscordExceptionFilter } from './modules/discord/flow/discord.exception';
 
 /**
  * These are API defaults that can be changed using environment variables,
