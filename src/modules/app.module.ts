@@ -11,7 +11,7 @@ import { NecordModule } from 'necord';
 
 import { CommonModule } from './common';
 import { DiscordModule } from './discord/discord.module';
-import { DiscordService } from './discord/discord.service';
+import { DiscordService } from './discord/provider/discord.service';
 import { PassengerModule } from './passenger/passenger.module';
 
 const intentsObj = [
